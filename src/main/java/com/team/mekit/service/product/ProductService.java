@@ -174,10 +174,26 @@ public class ProductService implements IProductService {
         return convertToDto(existingProduct);
     }
 
+    @Override
+    public List<ProductDto> getConvertedProducts(List<Product> products) {
+        return products.stream().map(this::convertToDto).toList();
+    }
 
     @Override
-    public List<Product> getAllProducts() {
-        return productRepository.findAll();
+    public List<Product> getProductsByCategory(String category) {
+        return productRepository.findByCategoryName(category);
+    }
+
+    @Override
+    public List<Product> findProductsByNameOrBrand(String name) {
+        return productRepository.findByNameOrBrand(name, name);
+    }
+
+
+    @Override
+    public List<Product> getAllProductsForAuthUser() {
+        Long id = iUserService.getAuthenticatedUser().getId();
+        return productRepository.findAllByUserId(id);
     }
 
     @Override

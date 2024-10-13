@@ -22,7 +22,7 @@ public class Product {
     private BigDecimal price;
     private String description;
 
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 

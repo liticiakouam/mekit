@@ -12,8 +12,10 @@ public class UserService implements IUserService {
 
     @Override
     public User getAuthenticatedUser() {
-        User user = User.builder().firstName("Anz").lastName("LK").email("Anz@com").build();
-        userRepository.save(user);
+        User user = User.builder().id(3L).firstName("Anz").lastName("LK").email("Anz@com").build();
+        if (userRepository.findAll().isEmpty()){
+            userRepository.save(user);
+        }
         return user;
     }
 }

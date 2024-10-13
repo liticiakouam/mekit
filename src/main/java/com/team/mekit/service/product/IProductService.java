@@ -19,8 +19,13 @@ public interface IProductService {
     void deleteProductById(Long id);
 
     ProductDto updateProduct(Long id, ProductUpdateRequest updatedProductDto, List<MultipartFile> newImages) throws IOException;
+    List<ProductDto> getConvertedProducts(List<Product> products);
 
-    List<Product> getAllProducts();
+    List<Product> getProductsByCategory(String category);
+
+    List<Product> findProductsByNameOrBrand(String name);
+
+    List<Product> getAllProductsForAuthUser();
 
     List<ProductDto> getAllProductsDto();
 

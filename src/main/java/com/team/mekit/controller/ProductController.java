@@ -33,7 +33,6 @@ public class ProductController {
         return  ResponseEntity.ok(new ApiResponse("success", productDtos));
     }
 
-
     @GetMapping("/product/{productId}/product")
     public ResponseEntity<ApiResponse> getProductById(@PathVariable Long productId) {
         try {
@@ -79,6 +78,44 @@ public class ProductController {
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
+    }
+
+    @GetMapping("/by/category")
+    public ResponseEntity<ApiResponse> getProductByCategory(@RequestParam String category){
+        try {
+            List<Product> products = productService.getProductsByCategory(category);
+            if (products.isEmpty()) {
+                return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("No products found ", null));
+            }
+            List<ProductDto> convertedProducts = productService.getConvertedProducts(products);
+            return  ResponseEntity.ok(new ApiResponse("success", convertedProducts));
+        } catch (Exception e) {
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("error", e.getMessage()));
+        }
+    }
+
+    @GetMapping("/by/name-or-brand")
+    public ResponseEntity<ApiResponse> findProductsByNameOrBrand(@RequestParam String keyword){
+        try {
+            List<Product> products = productService.findProductsByNameOrBrand(keyword);
+            if (products.isEmpty()) {
+                return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("No products found ", null));
+            }
+            List<ProductDto> convertedProducts = productService.getConvertedProducts(products);
+            return  ResponseEntity.ok(new ApiResponse("success", convertedProducts));
+        } catch (Exception e) {
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("error", e.getMessage()));
+        }
+    }
+
+    @GetMapping("/for-auth-user")
+    public ResponseEntity<ApiResponse> getAllProductsForAuthUser(){
+        List<Product> products = productService.getAllProductsForAuthUser();
+        if (products.isEmpty()) {
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("No products found ", null));
+        }
+        List<ProductDto> convertedProducts = productService.getConvertedProducts(products);
+        return  ResponseEntity.ok(new ApiResponse("success", convertedProducts));
     }
 
 }
