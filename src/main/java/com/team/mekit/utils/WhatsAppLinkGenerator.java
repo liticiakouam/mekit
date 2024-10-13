@@ -28,9 +28,13 @@ public class WhatsAppLinkGenerator {
         User user = iUserService.getAuthenticatedUser();
         String productUrl = "http://localhost:9191/api/products/" + productId + "/share-on-whatsApp";
         //String productUrl = "https://monapp.com/produit/" + productId;
-        String message = "Découvrez ce produit : " + product.getName() +
-                " au prix imbattable de "  + product.getPrice() +
-                "  - " + productUrl +generateImageUrls(product.getImages());
+
+        String message =
+                "Découvrez le produit : " + product.getName() +
+                        "\nqui coute " + product.getPrice() +
+                        "\ncliquez ici pour plus d'infos : " +
+                "http://localhost:9191/api/clicks/user/" + user.getId() + "/product/" + product.getId() + "/redirect";
+        ;
 
         // Encoder le message en URL
         String encodedMessage = URLEncoder.encode(message, StandardCharsets.UTF_8);

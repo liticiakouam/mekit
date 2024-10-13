@@ -1,6 +1,7 @@
 package com.team.mekit.service.product;
 
 import com.team.mekit.dto.ProductDto;
+import com.team.mekit.dto.UserDto;
 import com.team.mekit.entities.Category;
 import com.team.mekit.entities.Image;
 import com.team.mekit.entities.Product;
@@ -112,8 +113,10 @@ public class ProductService implements IProductService {
                 .map(Image::getUrl)
                 .collect(Collectors.toList());
 
+        UserDto userDto = convertToUserDto(product.getUser());
+
         // Retourner le DTO avec les informations du produit et les images
-        return new ProductDto(product.getId(), product.getName(), product.getBrand(), product.getPrice() ,product.getDescription(), product.getUser() ,product.getCategory(), imageUrls);
+        return new ProductDto(product.getId(), product.getName(), product.getBrand(), product.getPrice() ,product.getDescription(), userDto ,product.getCategory(), imageUrls);
     }
 
 
@@ -206,7 +209,9 @@ public class ProductService implements IProductService {
             for (Image image : product.getImages()) {
                 imageUrls.add(image.getUrl());
             }
-            productDtos.add(new ProductDto(product.getId(), product.getName(), product.getBrand(), product.getPrice() , product.getDescription(), product.getUser() ,product.getCategory(), imageUrls));
+            UserDto userDto = convertToUserDto(product.getUser());
+
+            productDtos.add(new ProductDto(product.getId(), product.getName(), product.getBrand(), product.getPrice() , product.getDescription(), userDto ,product.getCategory(), imageUrls));
         }
         return productDtos;
     }
@@ -221,6 +226,7 @@ public class ProductService implements IProductService {
                 .map(Image::getUrl)
                 .collect(Collectors.toList());
 
+        UserDto userDto = convertToUserDto(theProduct.getUser());
         // Créer et retourner le ProductDto
         return new ProductDto(
                 theProduct.getId(),
@@ -228,9 +234,22 @@ public class ProductService implements IProductService {
                 theProduct.getBrand(),
                 theProduct.getPrice(),
                 theProduct.getDescription(),
-                theProduct.getUser(),
+                userDto,
                 theProduct.getCategory(),
                 imageUrls
+        );
+    }
+    private UserDto convertToUserDto(User user) {
+        if (user == null) {
+            return null; // Gestion des cas où le produit est null
+        }
+
+        return new UserDto(
+                user.getId(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getEmail(),
+                user.getPhoneNumber()
         );
     }
 

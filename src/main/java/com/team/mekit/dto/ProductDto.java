@@ -15,9 +15,9 @@ public class ProductDto {
     private Long id;
     private String name;
     private String brand;
-    private BigDecimal price;
+    private Double price;
     private String description;
-    private User user;
+    private UserDto user;
     private Category category;
     private List<String> imageUrls;
 

@@ -39,6 +39,10 @@ public class User {
     )
     private Collection<Role> roles = new HashSet<>();
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Click> clicks = new ArrayList<>();
+
     public User(int i, String anz, String lk, String s, String anz1) {
     }
 }

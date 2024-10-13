@@ -13,7 +13,7 @@ public class ProductUpdateRequest {
     private Long id;
     private String name;
     private String brand;
-    private BigDecimal price;
+    private Double price;
     private String description;
     private String category;
     private List<MultipartFile> images;
