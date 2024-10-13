@@ -1,9 +1,12 @@
 package com.team.mekit.request;
 
+import com.team.mekit.dto.ImageDto;
 import com.team.mekit.entities.Category;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Data
 public class ProductUpdateRequest {
@@ -12,5 +15,6 @@ public class ProductUpdateRequest {
     private String brand;
     private BigDecimal price;
     private String description;
-    private Category category;
+    private String category;
+    private List<MultipartFile> images;
 }

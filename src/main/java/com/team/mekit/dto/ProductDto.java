@@ -2,12 +2,14 @@ package com.team.mekit.dto;
 
 
 import com.team.mekit.entities.Category;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 @Data
+@AllArgsConstructor
 public class ProductDto {
     private Long id;
     private String name;
@@ -15,5 +17,7 @@ public class ProductDto {
     private BigDecimal price;
     private String description;
     private Category category;
-    private List<ImageDto> images;
+    private List<String> imageUrls;
+
+
 }
