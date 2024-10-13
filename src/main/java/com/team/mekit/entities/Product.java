@@ -22,6 +22,10 @@ public class Product {
     private BigDecimal price;
     private String description;
 
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "category_id")
     private Category category;

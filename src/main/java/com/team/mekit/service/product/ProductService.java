@@ -4,6 +4,7 @@ import com.team.mekit.dto.ProductDto;
 import com.team.mekit.entities.Category;
 import com.team.mekit.entities.Image;
 import com.team.mekit.entities.Product;
+import com.team.mekit.entities.User;
 import com.team.mekit.exception.AlreadyExistsException;
 import com.team.mekit.exception.ResourceNotFoundException;
 import com.team.mekit.repository.CategoryRepository;
@@ -11,6 +12,7 @@ import com.team.mekit.repository.ImageRepository;
 import com.team.mekit.repository.ProductRepository;
 import com.team.mekit.request.AddProductRequest;
 import com.team.mekit.request.ProductUpdateRequest;
+import com.team.mekit.service.user.IUserService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -33,6 +35,7 @@ public class ProductService implements IProductService {
     private final CategoryRepository categoryRepository;
     private final ImageRepository imageRepository;
     private final ModelMapper modelMapper;
+    private final IUserService iUserService;
 
     public static String IMAGE_UPLOAD_DIR = System.getProperty("user.dir") + "/src/main/resources/static/images";
 
@@ -48,12 +51,15 @@ public class ProductService implements IProductService {
                     throw new ResourceNotFoundException("Category not found ");
                 });
 
+        User user = iUserService.getAuthenticatedUser();
+
         Product product = new Product();
         product.setName(request.getName());
         product.setDescription(request.getDescription());
         product.setPrice(request.getPrice());
         product.setBrand(request.getBrand());
         product.setCategory(category);
+        product.setUser(user);
 
         List<Image> images = new ArrayList<>();
 
@@ -107,7 +113,7 @@ public class ProductService implements IProductService {
                 .collect(Collectors.toList());
 
         // Retourner le DTO avec les informations du produit et les images
-        return new ProductDto(product.getId(), product.getName(), product.getBrand(), product.getPrice() ,product.getDescription(), product.getCategory(), imageUrls);
+        return new ProductDto(product.getId(), product.getName(), product.getBrand(), product.getPrice() ,product.getDescription(), product.getUser() ,product.getCategory(), imageUrls);
     }
 
 
@@ -184,7 +190,7 @@ public class ProductService implements IProductService {
             for (Image image : product.getImages()) {
                 imageUrls.add(image.getUrl());
             }
-            productDtos.add(new ProductDto(product.getId(), product.getName(), product.getBrand(), product.getPrice() , product.getDescription(), product.getCategory(), imageUrls));
+            productDtos.add(new ProductDto(product.getId(), product.getName(), product.getBrand(), product.getPrice() , product.getDescription(), product.getUser() ,product.getCategory(), imageUrls));
         }
         return productDtos;
     }
@@ -206,6 +212,7 @@ public class ProductService implements IProductService {
                 theProduct.getBrand(),
                 theProduct.getPrice(),
                 theProduct.getDescription(),
+                theProduct.getUser(),
                 theProduct.getCategory(),
                 imageUrls
         );
