@@ -26,6 +26,7 @@ public class User {
     @NaturalId
     private String email;
     private String password;
+    private String phoneNumber;
 
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
