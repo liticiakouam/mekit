@@ -26,10 +26,13 @@ public class DataInitializer implements ApplicationListener<ApplicationReadyEven
     }
 
     private void createDefaultCategoryIfNotExits(){
+        if (categoryRepository.findAll().isEmpty() ) {
             Category category1 = Category.builder().name("Vetements").build();
             Category category2 = Category.builder().name("Chaussures").build();
             categoryRepository.saveAll(List.of(category1, category2));
             System.out.println("Default category created successfully.");
+        }
+
     }
 
 
