@@ -10,6 +10,7 @@ import com.team.mekit.request.AddProductRequest;
 import com.team.mekit.request.ProductUpdateRequest;
 import com.team.mekit.response.ApiResponse;
 import com.team.mekit.service.product.IProductService;
+import com.team.mekit.utils.WhatsAppLinkGenerator;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +27,7 @@ import static org.springframework.http.HttpStatus.*;
 public class ProductController {
 
     private final IProductService productService;
+    private final WhatsAppLinkGenerator whatsAppLinkGenerator;
 
     @GetMapping("/all")
     public ResponseEntity<ApiResponse> getAllProducts() {
@@ -118,4 +120,11 @@ public class ProductController {
         return  ResponseEntity.ok(new ApiResponse("success", convertedProducts));
     }
 
+    @GetMapping("/{productId}/share-on-whatsApp")
+    public ResponseEntity<String> generateWhatsAppShareLink(
+            @PathVariable Long productId) {
+
+        String link = whatsAppLinkGenerator.generateProductShareLink(productId);
+        return ResponseEntity.ok(link);
+    }
 }

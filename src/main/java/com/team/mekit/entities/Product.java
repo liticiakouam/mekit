@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -19,7 +20,7 @@ public class Product {
     private Long id;
     private String name;
     private String brand;
-    private BigDecimal price;
+    private Double price;
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -33,7 +34,7 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> images;
 
-    public Product(String name, String brand, BigDecimal price, String description, Category category, List<Image> images) {
+    public Product(String name, String brand, Double price, String description, Category category, List<Image> images) {
         this.name = name;
         this.brand = brand;
         this.price = price;

@@ -16,7 +16,7 @@ public class AddProductRequest {
     private Long id;
     private String name;
     private String brand;
-    private BigDecimal price;
+    private Double price;
     private String description;
     private User user;
     private String category;

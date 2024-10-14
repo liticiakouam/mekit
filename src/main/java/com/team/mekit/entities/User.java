@@ -26,6 +26,7 @@ public class User {
     @NaturalId
     private String email;
     private String password;
+    private String phoneNumber;
 
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -37,6 +38,10 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id")
     )
     private Collection<Role> roles = new HashSet<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Click> clicks = new ArrayList<>();
 
     public User(int i, String anz, String lk, String s, String anz1) {
     }
