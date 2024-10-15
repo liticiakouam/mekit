@@ -30,4 +30,12 @@ public class ClickService implements IClickService {
         click.setClickCount(click.getClickCount() + 1);
         clickRepository.save(click);
     }
+
+    @Override
+    public int calculateClickPoint() {
+        User user = iUserService.getAuthenticatedUser();
+
+        Click click = clickRepository.findByUserId(user.getId()).get();
+        return click.getClickCount() * 2;
+    }
 }

@@ -1,5 +1,8 @@
 package com.team.mekit.controller;
 
+import com.team.mekit.dto.ProductDto;
+import com.team.mekit.entities.Product;
+import com.team.mekit.response.ApiResponse;
 import com.team.mekit.service.click.IClickService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -10,6 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
+import java.util.List;
+
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @RestController
 @AllArgsConstructor
@@ -33,5 +39,10 @@ public class ClickController {
         return ResponseEntity.status(HttpStatus.FOUND)
                 .location(URI.create(productUrl))
                 .build();
+    }
+
+    @GetMapping("/point-stat")
+    public ResponseEntity<ApiResponse> calculateClickPoint(){
+        return  ResponseEntity.ok(new ApiResponse("success", clickService.calculateClickPoint()));
     }
 }
