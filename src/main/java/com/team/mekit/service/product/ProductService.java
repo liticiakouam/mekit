@@ -1,7 +1,7 @@
 package com.team.mekit.service.product;
 
 import com.team.mekit.dto.ProductDto;
-import com.team.mekit.dto.UserDto;
+import com.team.mekit.dto.SellerDto;
 import com.team.mekit.entities.Category;
 import com.team.mekit.entities.Image;
 import com.team.mekit.entities.Product;
@@ -28,6 +28,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static com.team.mekit.utils.ConvertToDto.convertToSellerDto;
 
 @AllArgsConstructor
 @Service
@@ -113,10 +115,10 @@ public class ProductService implements IProductService {
                 .map(Image::getUrl)
                 .collect(Collectors.toList());
 
-        UserDto userDto = convertToUserDto(product.getUser());
+        SellerDto sellerDto = convertToSellerDto(product.getUser());
 
         // Retourner le DTO avec les informations du produit et les images
-        return new ProductDto(product.getId(), product.getName(), product.getBrand(), product.getPrice() ,product.getDescription(), userDto ,product.getCategory(), imageUrls);
+        return new ProductDto(product.getId(), product.getName(), product.getBrand(), product.getPrice() ,product.getDescription(), sellerDto,product.getCategory(), imageUrls);
     }
 
 
@@ -209,9 +211,9 @@ public class ProductService implements IProductService {
             for (Image image : product.getImages()) {
                 imageUrls.add(image.getUrl());
             }
-            UserDto userDto = convertToUserDto(product.getUser());
+            SellerDto sellerDto = convertToSellerDto(product.getUser());
 
-            productDtos.add(new ProductDto(product.getId(), product.getName(), product.getBrand(), product.getPrice() , product.getDescription(), userDto ,product.getCategory(), imageUrls));
+            productDtos.add(new ProductDto(product.getId(), product.getName(), product.getBrand(), product.getPrice() , product.getDescription(), sellerDto,product.getCategory(), imageUrls));
         }
         return productDtos;
     }
@@ -226,7 +228,7 @@ public class ProductService implements IProductService {
                 .map(Image::getUrl)
                 .collect(Collectors.toList());
 
-        UserDto userDto = convertToUserDto(theProduct.getUser());
+        SellerDto sellerDto = convertToSellerDto(theProduct.getUser());
         // Créer et retourner le ProductDto
         return new ProductDto(
                 theProduct.getId(),
@@ -234,23 +236,12 @@ public class ProductService implements IProductService {
                 theProduct.getBrand(),
                 theProduct.getPrice(),
                 theProduct.getDescription(),
-                userDto,
+                sellerDto,
                 theProduct.getCategory(),
                 imageUrls
         );
     }
-    private UserDto convertToUserDto(User user) {
-        if (user == null) {
-            return null; // Gestion des cas où le produit est null
-        }
 
-        return new UserDto(
-                user.getId(),
-                user.getFirstName(),
-                user.getLastName(),
-                user.getEmail(),
-                user.getPhoneNumber()
-        );
-    }
+
 
 }

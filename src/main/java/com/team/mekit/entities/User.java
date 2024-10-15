@@ -27,6 +27,9 @@ public class User {
     private String email;
     private String password;
     private String phoneNumber;
+    private String city;
+    private String address;
+    private String companyName;
 
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
