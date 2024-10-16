@@ -1,8 +1,6 @@
 package com.team.mekit.service.product;
 
-import com.team.mekit.dto.ImageDto;
 import com.team.mekit.dto.ProductDto;
-import com.team.mekit.entities.Image;
 import com.team.mekit.entities.Product;
 import com.team.mekit.exception.AlreadyExistsException;
 import com.team.mekit.request.AddProductRequest;
@@ -30,4 +28,7 @@ public interface IProductService {
     List<ProductDto> getAllProductsDto();
 
     ProductDto convertToDto(Product theProduct);
+
+    int getNumberOfProductIsRecommandedForASeller (Long sellerId);
+    int getNumberOfProductIsRecommandedByAutUser (Long recommanderId);
 }

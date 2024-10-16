@@ -1,6 +1,5 @@
 package com.team.mekit.repository;
 
-import com.team.mekit.entities.Image;
 import com.team.mekit.entities.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -13,5 +12,5 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     List<Product> findByNameOrBrand(String name, String brand);
 
-    List<Product> findAllByUserId(Long id);
+    List<Product> findAllBySellerId(Long id);
 }

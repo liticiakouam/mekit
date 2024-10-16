@@ -2,14 +2,14 @@ package com.team.mekit.data;
 
 
 import com.team.mekit.entities.Category;
+import com.team.mekit.entities.Product;
 import com.team.mekit.entities.Role;
 import com.team.mekit.entities.User;
 import com.team.mekit.repository.CategoryRepository;
+import com.team.mekit.repository.ProductRepository;
 import com.team.mekit.repository.RoleRepository;
 import com.team.mekit.repository.UserRepository;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,14 +27,16 @@ public class DataInitializer implements ApplicationListener<ApplicationReadyEven
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final ProductRepository productRepository;
 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
         Set<String> defaultRoles =  Set.of("ROLE_SELLER", "ROLE_RECOMMANDER");
         createDefaultRoleIfNotExits(defaultRoles);
         createDefaultCategoryIfNotExits();
-        createDefaultRecommanderIfNotExits();
+        createDefaultRecommenderIfNotExits();
         createDefaultSellerIfNotExits();
+        createDefaultProductIfNotExits();
     }
 
     private void createDefaultCategoryIfNotExits(){
@@ -47,7 +49,8 @@ public class DataInitializer implements ApplicationListener<ApplicationReadyEven
 
     }
 
-    private void createDefaultRecommanderIfNotExits(){
+
+    private void createDefaultRecommenderIfNotExits(){
         Role userRole = roleRepository.findByName("ROLE_RECOMMANDER").get();
         for (int i = 1; i<=3; i++){
             String defaultEmail = "anz"+i+"@email.com";
@@ -92,4 +95,23 @@ public class DataInitializer implements ApplicationListener<ApplicationReadyEven
                 .map(Role:: new).forEach(roleRepository::save);
         System.out.println("Default ROLE created successfully.");
     }
+
+    private void createDefaultProductIfNotExits(){
+        if (productRepository.findAll().isEmpty() ) {
+            Category category1 = Category.builder().name("Vetements").build();
+            User user = userRepository.findById(5L).get();
+            Product product = new Product();
+            product.setCategory(category1);
+            product.setName("polo");
+            product.setBrand("zara");
+            product.setDescription("very nice");
+            product.setPrice(5000.0);
+            product.setSeller(user);
+
+            productRepository.save(product);
+            System.out.println("Default PRODUCT created successfully.");
+        }
+
+    }
+
 }

@@ -124,6 +124,7 @@ public class ProductController {
         return  ResponseEntity.ok(new ApiResponse("success", convertedProducts));
     }
 
+    @PreAuthorize("hasRole('ROLE_RECOMMANDER')")
     @GetMapping("/{productId}/share-on-whatsApp")
     public ResponseEntity<String> generateWhatsAppShareLink(
             @PathVariable Long productId) {
@@ -131,4 +132,20 @@ public class ProductController {
         String link = whatsAppLinkGenerator.generateProductShareLink(productId);
         return ResponseEntity.ok(link);
     }
+
+    @PreAuthorize("hasRole('ROLE_SELLER')")
+    @GetMapping("/RecommandedForASeller/{userId}")
+    public ResponseEntity<ApiResponse> getNumberOfProductIsRecommandedForASeller(@PathVariable Long userId) {
+        int number = productService.getNumberOfProductIsRecommandedForASeller(userId);
+        return  ResponseEntity.ok(new ApiResponse("success", number));
+    }
+
+
+    @PreAuthorize("hasRole('ROLE_RECOMMANDER')")
+    @GetMapping("/RecommandedByRecommander/{userId}")
+    public ResponseEntity<ApiResponse> getNumberOfProductIsRecommandedByAutUser(@PathVariable Long userId) {
+        int number = productService.getNumberOfProductIsRecommandedByAutUser(userId);
+        return  ResponseEntity.ok(new ApiResponse("success", number));
+    }
+
 }

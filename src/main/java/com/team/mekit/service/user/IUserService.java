@@ -16,5 +16,5 @@ public interface IUserService {
     RecomDto getAuthenticatedUserInfoForRecom();
     void createARecommander(CreateARecommanderRequest recommanderRequest) throws AlreadyExistsException;
     void createASeller(CreateASellerRequest sellerRequest) throws AlreadyExistsException;
-
+    User findById(Long id);
 }

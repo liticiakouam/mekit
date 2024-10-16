@@ -86,6 +86,11 @@ public class UserService implements IUserService {
         userRepository.save(user);
     }
 
+    @Override
+    public User findById(Long id) {
+        return userRepository.findById(id).get();
+    }
+
     private User createSeller(CreateASellerRequest sellerRequest) {
         Role seller = roleRepository.findByName("ROLE_SELLER").get();
         Role recommander = roleRepository.findByName("ROLE_RECOMMANDER").get();
