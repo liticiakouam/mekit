@@ -12,6 +12,7 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +26,8 @@ public class DataInitializer implements ApplicationListener<ApplicationReadyEven
     private final CategoryRepository categoryRepository;
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
         Set<String> defaultRoles =  Set.of("ROLE_SELLER", "ROLE_RECOMMANDER");
@@ -56,7 +59,7 @@ public class DataInitializer implements ApplicationListener<ApplicationReadyEven
             user.setPhoneNumber("237655131077");
             user.setLastName("User" + i);
             user.setEmail(defaultEmail);
-            user.setPassword("123456");
+            user.setPassword(passwordEncoder.encode("123456"));
             user.setRoles(Set.of(userRole));
             userRepository.save(user);
             System.out.println("Default vet user " + i + " created successfully.");
@@ -76,7 +79,7 @@ public class DataInitializer implements ApplicationListener<ApplicationReadyEven
             user.setLastName("User" + i);
             user.setPhoneNumber("237655131077");
             user.setEmail(defaultEmail);
-            user.setPassword("123456");
+            user.setPassword(passwordEncoder.encode("123456"));
             user.setRoles(Set.of(userRole));
             userRepository.save(user);
             System.out.println("Default vet user " + i + " created successfully.");
