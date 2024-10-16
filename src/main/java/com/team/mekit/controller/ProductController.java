@@ -13,6 +13,7 @@ import com.team.mekit.service.product.IProductService;
 import com.team.mekit.utils.WhatsAppLinkGenerator;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -45,6 +46,7 @@ public class ProductController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_SELLER')")
     @PostMapping("/add")
     public ResponseEntity<ApiResponse> addProduct(@ModelAttribute AddProductRequest product,
                                                   @RequestParam("files") List<MultipartFile> files) {
@@ -60,6 +62,7 @@ public class ProductController {
 
     }
 
+    @PreAuthorize("hasRole('ROLE_SELLER')")
     @PutMapping("/product/{productId}/update")
     public  ResponseEntity<ApiResponse> updateProduct(@ModelAttribute ProductUpdateRequest request, @PathVariable Long productId, @RequestParam("files") List<MultipartFile> files) {
         try {
@@ -72,6 +75,7 @@ public class ProductController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_SELLER')")
     @DeleteMapping("/product/{productId}/delete")
     public ResponseEntity<ApiResponse> deleteProduct(@PathVariable Long productId) {
         try {
@@ -120,6 +124,7 @@ public class ProductController {
         return  ResponseEntity.ok(new ApiResponse("success", convertedProducts));
     }
 
+    @PreAuthorize("hasRole('ROLE_RECOMMANDER')")
     @GetMapping("/{productId}/share-on-whatsApp")
     public ResponseEntity<String> generateWhatsAppShareLink(
             @PathVariable Long productId) {
@@ -127,4 +132,20 @@ public class ProductController {
         String link = whatsAppLinkGenerator.generateProductShareLink(productId);
         return ResponseEntity.ok(link);
     }
+
+    @PreAuthorize("hasRole('ROLE_SELLER')")
+    @GetMapping("/RecommandedForASeller/{userId}")
+    public ResponseEntity<ApiResponse> getNumberOfProductIsRecommandedForASeller(@PathVariable Long userId) {
+        int number = productService.getNumberOfProductIsRecommandedForASeller(userId);
+        return  ResponseEntity.ok(new ApiResponse("success", number));
+    }
+
+
+    @PreAuthorize("hasRole('ROLE_RECOMMANDER')")
+    @GetMapping("/RecommandedByRecommander/{userId}")
+    public ResponseEntity<ApiResponse> getNumberOfProductIsRecommandedByAutUser(@PathVariable Long userId) {
+        int number = productService.getNumberOfProductIsRecommandedByAutUser(userId);
+        return  ResponseEntity.ok(new ApiResponse("success", number));
+    }
+
 }

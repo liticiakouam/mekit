@@ -32,7 +32,7 @@ public class User {
     private String companyName;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Product> products = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.EAGER, cascade =

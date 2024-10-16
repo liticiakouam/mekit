@@ -9,16 +9,19 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @Entity
-public class Click {
+public class Recommendation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private Long productId;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "seller")
+    private User seller;
 
-    private int clickCount = 0;
+    @ManyToOne
+    @JoinColumn(name = "recommender")
+    private User recommender;
 
 }
