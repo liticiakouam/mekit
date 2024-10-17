@@ -33,9 +33,15 @@ public class ShopConfig {
     private final ShopUserDetailsService userDetailsService;
     private final JwtAuthEntryPoint authEntryPoint;
 
-    private static final List<String> NON_SECURED_URLS =
-            List.of("/api/products/all", "/api/products/{productId}/product", "/api/users/recommander/add", "/api/users/seller/add", "/swagger-ui/index.html");
-
+    private static final List<String> NON_SECURED_URLS = List.of(
+            "/api/products/all",
+            "/api/products/{productId}/product",
+            "/api/users/recommander/add",
+            "/api/users/seller/add",
+            "/v3/api-docs/**",
+            "/swagger-ui/**",
+            "/swagger-ui/index.html"
+    );
 
     @Bean
     public ModelMapper modelMapper() {
