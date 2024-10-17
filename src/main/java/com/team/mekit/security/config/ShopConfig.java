@@ -51,7 +51,8 @@ public class ShopConfig {
             "/swagger-ui",
             "/swagger-ui/**",
             "/swagger-ui/index.html",
-            "/swagger-ui.html"
+            "/swagger-ui.html",
+            "https://cheerful-acceptance-production.up.railway.app/"
     );
 
     @Bean
