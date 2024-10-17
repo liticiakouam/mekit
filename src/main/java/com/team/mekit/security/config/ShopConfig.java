@@ -42,8 +42,13 @@ public class ShopConfig {
             "/api/products/all",
             "/api/products/{productId}/product",
             "/api/users/recommander/add",
-            "/api/users/seller/add"
+            "/api/users/seller/add",
+            "/v3/api-docs/**",
+            "/swagger-ui/**",
+            "/swagger-ui/index.html",
+            "/swagger-ui.html"
     );
+
 
     @Bean
     public ModelMapper modelMapper() {
@@ -67,29 +72,6 @@ public class ShopConfig {
     }
 
     @Bean
-    public OpenAPI customOpenAPI() {
-        return new OpenAPI()
-                .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
-                .components(new Components().addSecuritySchemes("bearerAuth",
-                        new SecurityScheme().name("bearerAuth")
-                                .type(SecurityScheme.Type.HTTP)
-                                .scheme("bearer")
-                                .bearerFormat("JWT")));
-    }
-
-    @Bean
-    @Profile("dev")
-    public SecurityFilterChain devSecurityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
-                                .anyRequest().permitAll());
-
-        return http.build();
-    }
-
-
-    @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider() {
         var authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService);
@@ -107,8 +89,8 @@ public class ShopConfig {
                         .anyRequest().authenticated());
         http.authenticationProvider(daoAuthenticationProvider());
         http.addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+
         return http.build();
-        
     }
 
     @Bean
