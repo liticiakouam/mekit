@@ -3,6 +3,10 @@ package com.team.mekit.security.config;
 import com.team.mekit.security.jwt.AuthTokenFilter;
 import com.team.mekit.security.jwt.JwtAuthEntryPoint;
 import com.team.mekit.security.user.ShopUserDetailsService;
+import io.swagger.v3.oas.models.Components;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme;
 import lombok.AllArgsConstructor;
 import org.apache.catalina.filters.CorsFilter;
 import org.modelmapper.ModelMapper;
@@ -41,9 +45,25 @@ public class ShopConfig {
             "/api/products/all",
             "/api/products/{productId}/product",
             "/api/users/recommander/add",
-            "/api/users/seller/add"
-
+            "/api/users/seller/add",
+            "/v3/api-docs",
+            "/v3/api-docs/**",
+            "/swagger-ui",
+            "/swagger-ui/**",
+            "/swagger-ui/index.html",
+            "/swagger-ui.html"
     );
+
+    @Bean
+    public OpenAPI customOpenAPI() {
+        return new OpenAPI()
+                .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
+                .components(new Components().addSecuritySchemes("bearerAuth",
+                        new SecurityScheme().name("bearerAuth")
+                                .type(SecurityScheme.Type.HTTP)
+                                .scheme("bearer")
+                                .bearerFormat("JWT")));
+    }
 
     @Bean
     public ModelMapper modelMapper() {
@@ -88,22 +108,6 @@ public class ShopConfig {
 
         return http.build();
     }
-
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable)
-                .sessionManagement(session ->
-                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth ->
-                        auth.requestMatchers(NON_SECURED_URLS.toArray(String[]::new)).permitAll()
-                                .anyRequest().authenticated());
-
-        http.authenticationProvider(daoAuthenticationProvider());
-        http.addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-
-        return http.build();
-    }
-
 
     @Bean
     public WebMvcConfigurer corsConfigurer() {
