@@ -46,12 +46,8 @@ public class ShopConfig {
             "/api/users/recommander/add",
             "/api/users/seller/add",
             "/api/auth/login",
-            "/v3/api-docs",
             "/v3/api-docs/**",
-            "/swagger-ui",
             "/swagger-ui/**",
-            "/swagger-ui/index.html",
-            "/swagger-ui.html",
             "https://cheerful-acceptance-production.up.railway.app/"
     );
 
