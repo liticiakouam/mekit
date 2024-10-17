@@ -47,9 +47,12 @@ public class ShopConfig {
             "/api/users/recommander/add",
             "/api/users/seller/add",
             "/api/auth/login",
+            "/v3/api-docs",
             "/v3/api-docs/**",
+            "/swagger-ui",
             "/swagger-ui/**",
-            "/swagger-ui/index.html"
+            "/swagger-ui/index.html",
+            "/swagger-ui.html"
     );
 
     @Bean
@@ -99,18 +102,7 @@ public class ShopConfig {
                 .cors(AbstractHttpConfigurer::disable) // Désactive CORS si nécessaire (ou configure-le)
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(authEntryPoint))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth ->auth
-                        .requestMatchers(
-                                "/api/products/all",
-                                "/api/products/{productId}/product",
-                                "/api/users/recommander/add",
-                                "/api/users/seller/add",
-                                "/api/auth/login",
-                                "/v3/api-docs/**",
-                                "/swagger-ui/**",
-                                "/swagger-ui/index.html",
-                                "/swagger-ui.html"
-                        ).permitAll()
+                .authorizeHttpRequests(auth ->auth.requestMatchers(NON_SECURED_URLS.toArray(String[]::new)).permitAll()
                         .anyRequest().authenticated());
         http.authenticationProvider(daoAuthenticationProvider());
         http.addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class);
