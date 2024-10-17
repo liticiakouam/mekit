@@ -44,11 +44,8 @@ public class ShopConfig {
             "/api/users/recommander/add",
             "/api/users/seller/add",
             "/v3/api-docs/**",
-            "/swagger-ui/**",
-            "/swagger-ui/index.html",
-            "/swagger-ui.html"
+            "/swagger-ui/**"
     );
-
 
     @Bean
     public ModelMapper modelMapper() {
