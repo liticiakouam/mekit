@@ -67,7 +67,7 @@ public class UserController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<ApiResponse> getAllProducts() {
+    public ResponseEntity<ApiResponse> getAllUsers() {
         List<User> users = userService.getAllUsers();
         return  ResponseEntity.ok(new ApiResponse("success", users));
     }
