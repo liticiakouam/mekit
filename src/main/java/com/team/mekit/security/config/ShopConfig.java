@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -41,10 +42,7 @@ public class ShopConfig {
             "/api/products/all",
             "/api/products/{productId}/product",
             "/api/users/recommander/add",
-            "/api/users/seller/add",
-            "/v3/api-docs/**",
-            "/swagger-ui/**",
-            "/swagger-ui.html"
+            "/api/users/seller/add"
     );
 
     @Bean
@@ -78,6 +76,18 @@ public class ShopConfig {
                                 .scheme("bearer")
                                 .bearerFormat("JWT")));
     }
+
+    @Bean
+    @Profile("dev")
+    public SecurityFilterChain devSecurityFilterChain(HttpSecurity http) throws Exception {
+        http.csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(auth ->
+                        auth.requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+                                .anyRequest().permitAll());
+
+        return http.build();
+    }
+
 
     @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider() {
