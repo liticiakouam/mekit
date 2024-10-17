@@ -42,7 +42,7 @@ public class ShopConfig {
 
     private static final List<String> NON_SECURED_URLS = List.of(
             "/api/products/all",
-            "/api/products/{productId}/product",
+            "/api/products/*/product",
             "/api/users/recommander/add",
             "/api/users/seller/add",
             "/api/auth/login",
