@@ -3,6 +3,10 @@ package com.team.mekit.security.config;
 import com.team.mekit.security.jwt.AuthTokenFilter;
 import com.team.mekit.security.jwt.JwtAuthEntryPoint;
 import com.team.mekit.security.user.ShopUserDetailsService;
+import io.swagger.v3.oas.models.Components;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
@@ -40,7 +44,7 @@ public class ShopConfig {
             "/api/users/seller/add",
             "/v3/api-docs/**",
             "/swagger-ui/**",
-            "/swagger-ui/index.html"
+            "/swagger-ui.html"
     );
 
     @Bean
@@ -62,6 +66,17 @@ public class ShopConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
         return  authConfig.getAuthenticationManager();
 
+    }
+
+    @Bean
+    public OpenAPI customOpenAPI() {
+        return new OpenAPI()
+                .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
+                .components(new Components().addSecuritySchemes("bearerAuth",
+                        new SecurityScheme().name("bearerAuth")
+                                .type(SecurityScheme.Type.HTTP)
+                                .scheme("bearer")
+                                .bearerFormat("JWT")));
     }
 
     @Bean
