@@ -8,6 +8,7 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import lombok.AllArgsConstructor;
+import org.apache.catalina.filters.CorsFilter;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,6 +26,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -43,8 +47,12 @@ public class ShopConfig {
             "/api/products/{productId}/product",
             "/api/users/recommander/add",
             "/api/users/seller/add",
+            "/v3/api-docs",
             "/v3/api-docs/**",
-            "/swagger-ui/**"
+            "/swagger-ui",
+            "/swagger-ui/**",
+            "/swagger-ui/index.html",
+            "/swagger-ui.html"
     );
 
     @Bean
@@ -80,6 +88,7 @@ public class ShopConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http.csrf(AbstractHttpConfigurer::disable)
+                .cors(AbstractHttpConfigurer::disable) // Désactive CORS si nécessaire (ou configure-le)
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(authEntryPoint))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->auth.requestMatchers(NON_SECURED_URLS.toArray(String[]::new)).permitAll()
@@ -91,17 +100,34 @@ public class ShopConfig {
     }
 
     @Bean
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(@NonNull CorsRegistry registry) {
-                registry.addMapping("/**") // Apply to all endpoints
-                        .allowedOrigins("*") // Allow this origin
-                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Allow these HTTP methods
-                        .allowedHeaders("*") // Allow all headers
-                        .allowCredentials(true); // Allow credentials
-            }
-        };
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.csrf(AbstractHttpConfigurer::disable)
+                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Active CORS
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(auth ->
+                        auth.requestMatchers(NON_SECURED_URLS.toArray(String[]::new)).permitAll()
+                                .anyRequest().authenticated());
+
+        http.authenticationProvider(daoAuthenticationProvider());
+        http.addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+
+        return http.build();
     }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedOrigins(List.of("*")); // Autorise toutes les origines (à restreindre en production)
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Méthodes autorisées
+        config.setAllowedHeaders(List.of("*")); // Tous les headers autorisés
+        config.setAllowCredentials(true); // Autorise les cookies (ou JWT)
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config); // Applique cette config à toutes les routes
+        return source;
+    }
+
+
 
 }
