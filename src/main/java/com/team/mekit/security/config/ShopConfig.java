@@ -96,7 +96,8 @@ public class ShopConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurer()))
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(authEntryPoint))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth ->auth.requestMatchers(NON_SECURED_URLS.toArray(String[]::new)).permitAll()
+               // .authorizeHttpRequests(auth ->auth.requestMatchers(NON_SECURED_URLS.toArray(String[]::new)).permitAll()
+                .authorizeHttpRequests(auth ->auth.requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .anyRequest().authenticated());
         http.authenticationProvider(daoAuthenticationProvider());
         http.addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class);
@@ -108,7 +109,6 @@ public class ShopConfig {
     public CorsConfigurationSource corsConfigurer() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of("*")); // Autoriser toutes les origines (ajustez cela en production)
-        configuration.setAllowedOrigins(List.of("/https://cheerful-acceptance-production.up.railway.app/swagger-ui/index.html")); // Autoriser toutes les origines (ajustez cela en production)
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Méthodes autorisées
         configuration.setAllowedHeaders(List.of("*")); // Autoriser tous les headers
         configuration.setAllowCredentials(true); // Autoriser les credentials
