@@ -36,7 +36,6 @@ public class WebSecurityConfig {
     private static final List<String> NON_SECURED_URLS = List.of(
             "/api/auth/login",
             "/api/products/all",
-            "/api/users/all",
             "/api/users/recommander/add",
             "/api/users/seller/add",
             "/api/user/{userId}/product/{productId}/redirect",
