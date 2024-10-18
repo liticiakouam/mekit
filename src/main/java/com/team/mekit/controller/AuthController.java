@@ -4,14 +4,11 @@ import com.team.mekit.request.LoginRequest;
 import com.team.mekit.response.ApiResponse;
 import com.team.mekit.response.JwtResponse;
 import com.team.mekit.security.jwt.JwtUtils;
-import com.team.mekit.security.user.ShopUserDetails;
-import com.team.mekit.security.user.ShopUserDetailsService;
+import com.team.mekit.security.user.UserDetailsImpl;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -37,7 +34,7 @@ public class AuthController {
                             request.getEmail(), request.getPassword()));
             SecurityContextHolder.getContext().setAuthentication(authentication);
             String jwt = jwtUtils.generateTokenForUser(authentication);
-            ShopUserDetails userDetails = (ShopUserDetails) authentication.getPrincipal();
+            UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
             JwtResponse jwtResponse = new JwtResponse(userDetails.getId(), jwt);
             return ResponseEntity.ok(new ApiResponse("Login Success!", jwtResponse));
         } catch (AuthenticationException e) {

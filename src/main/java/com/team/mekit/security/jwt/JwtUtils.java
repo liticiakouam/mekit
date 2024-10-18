@@ -1,6 +1,6 @@
 package com.team.mekit.security.jwt;
 
-import com.team.mekit.security.user.ShopUserDetails;
+import com.team.mekit.security.user.UserDetailsImpl;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -24,7 +24,7 @@ public class JwtUtils {
     private int expirationTime;
 
     public String generateTokenForUser(Authentication authentication) {
-        ShopUserDetails userPrincipal = (ShopUserDetails) authentication.getPrincipal();
+        UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
 
         List<String> roles = userPrincipal.getAuthorities()
                 .stream()
