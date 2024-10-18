@@ -93,12 +93,11 @@ public class ShopConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http.csrf(AbstractHttpConfigurer::disable)
-                .cors(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurer()))
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(authEntryPoint))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth ->auth.requestMatchers(NON_SECURED_URLS.toArray(String[]::new)).permitAll())
-                        ;
+                .authorizeHttpRequests(auth ->auth.requestMatchers(NON_SECURED_URLS.toArray(String[]::new)).permitAll()
+                        .anyRequest().authenticated());
         http.authenticationProvider(daoAuthenticationProvider());
         http.addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
