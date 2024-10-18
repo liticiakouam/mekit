@@ -42,12 +42,12 @@ public class ShopConfig {
 
     private static final List<String> NON_SECURED_URLS = List.of(
             "/api/products/all",
+            "/api/products/*/product",
             "/api/users/recommander/add",
             "/api/users/seller/add",
             "/api/auth/login",
             "/v3/api-docs/**",
-            "/swagger-ui/**",
-            "https://cheerful-acceptance-production.up.railway.app/swagger-ui/index.html/"
+            "/swagger-ui/**"
     );
 
     @Bean
