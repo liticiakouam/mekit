@@ -29,7 +29,7 @@ public class WhatsAppLinkGenerator {
 
         Product product = productRepository.findById(productId).get();
         User recommander = iUserService.getAuthenticatedUser();
-        String productUrl = "http://localhost:9191/api/products/" + productId + "/share-on-whatsApp";
+        String productUrl = "https://cheerful-acceptance-production.up.railway.app/api/products/" + productId + "/share-on-whatsApp";
 
         saveProductRecommandation(productId, recommander, product.getSeller());
 
@@ -37,7 +37,7 @@ public class WhatsAppLinkGenerator {
                 "Découvrez le produit : " + product.getName() +
                         "\nqui coute " + product.getPrice() +
                         "\ncliquez ici pour plus d'infos : " +
-                "http://localhost:9191/api/clicks/user/" + recommander.getId() + "/product/" + product.getId() + "/redirect";
+                "https://cheerful-acceptance-production.up.railway.app/api/clicks/user/" + recommander.getId() + "/product/" + product.getId() + "/redirect";
         ;
 
         // Encoder le message en URL

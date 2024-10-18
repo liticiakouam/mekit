@@ -33,7 +33,7 @@ public class ClickController {
         clickService.incrementClick(userId);
 
         // Construire l'URL de redirection vers le produit
-        String productUrl = "http://localhost:9191/api/products/product/" + productId + "/product"; // URL vers le produit
+        String productUrl = "https://cheerful-acceptance-production.up.railway.app/api/products/product/" + productId + "/product"; // URL vers le produit
 
         // Rediriger l'utilisateur
         return ResponseEntity.status(HttpStatus.FOUND)
