@@ -34,10 +34,10 @@ public class ShopConfig {
     private final JwtAuthEntryPoint authEntryPoint;
 
     private static final List<String> NON_SECURED_URLS = List.of(
+            "/api/auth/login",
             "/api/products/all",
             "/api/users/recommander/add",
             "/api/users/seller/add",
-            "/api/auth/login",
             "/api/user/{userId}/product/{productId}/redirect",
             "/api/products/{productId}/product"
     );
